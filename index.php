@@ -75,4 +75,4 @@ $totalrepayment = round($totalrepayment, 2);
 $interestvalue = round($interestvalue, 2);
 echo"With an initial loan of <font color=\"green\">£$subloanamount</font> you should pay approximately <font color=\"red\">£$interestvalue</font> in interest. You will pay around <b>£$permonth per month</b> for <i>$submonths months</i> (not including fees or penalties if applicable). ";	
 }
-?><br><br><small>Calculator PHP Script can be downloaded or changed on Github. Originally developed by <a href="https://allapprovedcatalogues.co.uk/">AllApprovedCatalogues.co.uk</a></small><br></body></html>
+?><br><br><small>Calculator PHP Script can be downloaded or changed on <a href="https://github.com/AllApprovedCats/Catalogue-Repayment-Calculator/tree/master">Github</a>. Originally developed by <a href="https://allapprovedcatalogues.co.uk/">AllApprovedCatalogues.co.uk</a></small><br></body></html>
