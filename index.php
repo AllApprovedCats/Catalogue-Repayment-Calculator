@@ -1,14 +1,13 @@
 <?php
-function letscalculate( $loanamount , $rateapr, $numbermonths ) {
+function letscalculate( $amt , $interest, $term ) {
 
-$rateaprnt = $rateapr/1200;
-$rateaprnt1 = 1+$rateaprnt;
-$r1 = pow($rateaprnt1, $numbermonths);
-
-$pmt = $loanamount*($rateaprnt*$r1)/($r1-1);
-
-    return $pmt;
-
+$interestamount = $interest/12;
+$interestpermonth = $interestamount*$term;
+$newamount = $amt/100;
+$newamountperc = 100+$interestpermonth;
+$newamount = $newamount*$newamountperc;
+$newamount = $newamount-$amt;
+return $newamount;
 }
 ?>
 <?php
@@ -36,19 +35,19 @@ if(!is_numeric($subloanamount) || $subloanamount == ""){ $subloanamount = "100";
 	<select name="numbermonths" style=" width:100%;">
 	<?php
 	//Outputs field options for 36 months
-	$months = range(1, 36);
+	$months = range(3, 48);
 		foreach($months as $month){
 		//Marks Default Month from previous submission
 		if($submonths == $month){ $default = " selected"; }else{ $default = ""; }
 		//If the month is singular, output month, else output months
-		if($month == "1"){ echo "<option value=\"1\">1 Month</option\n"; }else{ echo"<option value=\"$month\"$default>$month Months</option>\n"; }
+		if($month == "1"){ echo "<option value=\"1\">1 Month</option>\n"; }else{ echo"<option value=\"$month\"$default>$month Months</option>\n"; }
 		}
 	?>	</select><br/>
 	<!-- End Dropdown for Months Selector -->
 	
 		<!-- Begin APR Rate Field -->
 		<label>APR Rate</label><br/>
-		<span style="border: 1px inset #ccc;"><input type="number" name="rateapr" min="0" value="<?php echo $subrateapr; ?>" max="10" step="0.1" style="text-align:right; border:none; padding:0px; outline:none; width:95%;"/>%</span><br/>
+		<span style="border: 1px inset #ccc;"><input type="number" name="rateapr" min="0" value="<?php echo $subrateapr; ?>" max="30" step="0.1" style="text-align:right; border:none; padding:0px; outline:none; width:95%;"/>%</span><br/>
 		<!-- End APR Rate Field -->
 	
 	
@@ -67,12 +66,14 @@ if(!is_numeric($subloanamount) || $subloanamount == ""){ $subloanamount = "100";
 <?php
 //If hidden field is set, start calculation
 if($_POST['calculate'] == "yes"){
+//$interestvalue = letscalculate($subloanamount, $subrateapr, $submonths);
+// LETS CALCULATE INTEREST MONTHLY DIVIDE YEAR BY 12 AND WORK FROM HERE
 $interestvalue = letscalculate($subloanamount, $subrateapr, $submonths);
 $totalrepayment = $subloanamount+$interestvalue;
 $permonth = $totalrepayment/$submonths;
 $permonth = round($permonth, 2);
-$totalrepayment = round($totalrepayment, 2);
-$interestvalue = round($interestvalue, 2);
-echo"With an initial loan of <font color=\"green\">£$subloanamount</font> you should pay approximately <font color=\"red\">£$interestvalue</font> in interest. You will pay around <b>£$permonth per month</b> for <i>$submonths months</i> (not including fees or penalties if applicable). ";	
+$totalrepayment = round($totalrepayment, 2); $totalrepayment = number_format((float)$totalrepayment, 2, '.', '');
+$interestvalue = round($interestvalue, 2); $interestvalue = number_format((float)$interestvalue, 2, '.', '');
+echo"With an initial loan of <font color=\"green\">£$subloanamount</font> you should pay approximately <font color=\"red\">£$interestvalue</font> in interest. You will pay around <b>£$permonth per month</b> for <i>$submonths months</i>. Your total repayment amount would be <b>£$totalrepayment</b>. (not including fees or penalties if applicable). ";	
 }
-?><br><br><small>Calculator PHP Script can be downloaded or changed on <a href="https://github.com/AllApprovedCats/Catalogue-Repayment-Calculator/tree/master">Github</a>. Originally developed by <a href="https://allapprovedcatalogues.co.uk/">AllApprovedCatalogues.co.uk</a></small><br></body></html>
+?><br><br><small>Open Source PHP Script at <a href="https://github.com/AllApprovedCats/Catalogue-Repayment-Calculator/tree/master" target"_blank">Github</a>. Originally developed by <a href="https://allapprovedcatalogues.co.uk/">AllApprovedCatalogues.co.uk</a></small><br></body></html>
